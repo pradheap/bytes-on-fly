@@ -1,0 +1,49 @@
+import threading
+import subprocess
+import traceback
+import shlex
+import os
+
+class Command(object):
+    """
+    Enables to run subprocess commands in a different thread with TIMEOUT option.
+
+    Based on jcollado's solution:
+    http://stackoverflow.com/questions/1191374/subprocess-with-timeout/4825933#4825933
+    """
+    command = ''
+    process = None
+    status = None
+    output, error = '', ''
+
+    def __init__(self, command):
+        if isinstance(command, basestring):
+            command = shlex.split(command)
+        self.command = command
+
+    def run(self, timeout=None):
+        """ Run a command then return: (status, output, error). """
+        def target():
+            try:
+                os.chdir("/var/chroot")
+                os.chroot("/var/chroot")
+                os.setgid(1003)
+                os.setuid(1002)
+                print self.command
+                print 'inside chroot'
+		self.process = subprocess.Popen(str('php /var/chroot/tmp/snippet.php\n\n').strip(), stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True, shell=True)
+                self.output, self.error = self.process.communicate(None)
+                self.status = self.process.returncode
+            except:
+
+                self.error = traceback.format_exc()
+                self.status = -1
+        # default stdout and stderr
+        # thread
+        thread = threading.Thread(target=target)
+        thread.start()
+        thread.join(timeout)
+        if thread.is_alive():
+            self.process.kill()
+            thread.join()
+        return self.status, self.output, self.error

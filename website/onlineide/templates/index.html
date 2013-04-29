@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %} Online Compiler/Interpreter {% endblock %}
+
+{% block body %}
+   <div id="onlineide" class="clearfix">
+       <form name="theform" action="." method="post" id="theform">
+          <label id="id_name">Name:</label>
+          <input type="text" name="name" value="" id="name" />
+          <label id="id_lang">Language:</label>
+          <input type="text" name="lang" value="" id="lang" />
+          <label id="id_snippet">Snippet:</label>
+          <textarea name="snippet" rows="20" cols="100"></textarea>
+          {% csrf_token %}
+          <div id="submit">
+              <input type="submit" value="Submit"/>
+          </div>
+       </form>
+   </div>
+
+{% endblock %}
+
+
+

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Online Compiler/Interpreter {% endblock %}
+
+{% block content %}
+     <div id="onlineide" class ="clearfix">
+        <div id ="snippet_form">
+           <form name="theform" action="." method="post" id="theform">
+              <div id ="name_form">
+                 <label id ="lang"> Language: </label>
+                 <input type="text" name="lang" value="" id="lang"/>
+                 <label id ="lang"> Language: </label>
+                 <input type="text" name="lang" value="" id="lang"/>
+                 <label id ="lang"> Language: </label>
+                 <input type="text" name="lang" value="" id="lang"/>
+
+{% endblock %}
